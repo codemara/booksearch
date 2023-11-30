@@ -5,7 +5,8 @@
 <!-- CCCS310 - Assignment 4
  * @student Noemi Desmarais-Racine
  * @date 2022-04-20
- * 
+ *
+ * @last modified 11/2023: update random house api
 
 This is a book search engine requesting XML and JSON from APIs with JavaScript 
 and displaying the results with JavaScript, CSS and HTML
@@ -118,51 +119,15 @@ and displaying the results with JavaScript, CSS and HTML
 	readISBN(xmlText) -> Called from the XML onload function in getISBN() 
 	xmlText: is a String with a text in XML format returned from the API
 	*/
-	function readISBN(xmlText){
-		
-		//formatCode: is an array with all the possible book format codes related to the different ISBN from the API
-		//the codes are manually organized to prioritize certain codes before others
-		var formatCode = ["MM", "HC", "DN", "TR", "EL", "TW", "AU", "DG", "MG", "NM", "NT", "BX", "MH", "BR", "VI", "CD", "CS"];
-		
-		//Use DOMParser to parse the XML String into an XML object
-		var parser, xmlDoc;
-		parser = new DOMParser();
-		xmlDoc = parser.parseFromString(xmlText,"text/xml");
-		
+	function readISBN(jsonObj){
+			
 		//arrISBN: will contain the selected ISBN Strings that will be displayed
 		let arrISBN = [];
-		//titles: Extracts only the titles portion of the XML Object
-		let titles = xmlDoc.getElementsByTagName("titles");
-		//stored: boolean switch to indicate when a single ISBN has been selected for a book
-		let stored = false;
 		
 		//Loops through all the titles in the XML Object
-		for (i = 0; i < titles.length; i++) {
+		for (i = 0; i < jsonObj.data.results.length; i++) {
 			
-			//Loops through all the possible book format code
-			for (j=0; j < formatCode.length; j++){
-				
-				//Loops through all the bookcode:ISBN pairs for a single book
-				for (k = 0; k < titles[i].childNodes.length; k++){
-				
-					if (titles[i].childNodes[k].attributes[0].nodeValue == formatCode[j]){
-						//When the first ISBN with a prioritized book code is found, it is stored in arrISBN
-						arrISBN.push(titles[i].childNodes[k].innerHTML);
-						//The switch is on
-						stored = true
-						//The first loop is over
-						break;
-					}
-					
-				}
-				if (stored){
-					//When the first loop is broken, the second loop breaks also
-					//To go to the next book item and the switch is reseted
-					stored = false;
-					break;
-				}
-				
-			}
+			arrISBN[i] = jsonObj.data.results[i].id;
 			
 		}
 
@@ -193,21 +158,33 @@ and displaying the results with JavaScript, CSS and HTML
 		}
 		
 	}
+
+
 	
 	/* 
 	getISBN(keyword) -> Called from searchBooks() 
 	keyword: is a String obtained from the user's input
 	*/
+
+
+
 	function getISBN(keyword){
 	
-		//GET Request for an XML text from Penguin Random House's API with the keyword from the user
-		var xmlRequest = new XMLHttpRequest();
-		xmlRequest.open("GET","https://reststop.randomhouse.com/resources/works/?start=0&max=100&expandLevel=1&search=" + keyword,true);
-		xmlRequest.send();
-		xmlRequest.onload = function(){
+		//GET Request for a JSON Object from Penguin Random House's API with the keyword (query q) from the user
+
+		//A fetch GET call to Open Library's API with the specific ISBN number added to the url
+		fetch("https://api.penguinrandomhouse.com/resources/v2/title/domains/PRH.US/search?rows=20&docType=isbn&api_key=x2w6xdemsxy79fujj6z53hbh&q=" + keyword ,{
+			method: "GET",
+		 })
+		 .then(response => response.json())
+		 .then(function(json){
+			//When the JSON object is returnded from the API it is stored in item 
 			//Callback function when the XML text is received
-			readISBN(xmlRequest.responseText);
-		}
+			readISBN(json[Object.keys(json)[0]]);
+			
+		 })
+		 .catch(console.error);
+
 		
 	}
 	/*
