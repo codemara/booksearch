@@ -90,6 +90,8 @@ and displaying the results with JavaScript, CSS and HTML
 			//When the JSON object is returnded from the API it is stored in item 
 			let item = json[Object.keys(json)[0]];
 
+			console.log(item);
+
 			//Tests if the returned object contains the desired values: title, cover, url, author, publisher and subject 
 			if (Object.keys(json).length != 0  && item.title != null && item.cover != null && item.url != null && item.subjects != null && item.authors != null && item.publishers != null) {
 				//if the object is valid it is displayed in HTML
