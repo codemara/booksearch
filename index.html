@@ -126,8 +126,10 @@ and displaying the results with JavaScript, CSS and HTML
 		
 		//Loops through all the titles in the XML Object
 		for (i = 0; i < jsonObj.data.results.length; i++) {
+			let isbn = jsonObj.data.results[i].id
+			let isbnArr = isbn.split('-');
 			
-			arrISBN[i] = jsonObj.data.results[i].id;
+			arrISBN[i] = isbnArr[isbnArr.lenght-1];
 			
 		}
 
@@ -178,8 +180,8 @@ and displaying the results with JavaScript, CSS and HTML
 		 })
 		 .then(response => response.json())
 		 .then(function(json){
-			//When the JSON object is returnded from the API it is stored in item 
-			//Callback function when the XML text is received
+			//When the JSON object is returned from the API it is stored in item 
+			//Callback function when the json is received
 			readISBN(json);
 			console.log(json);
 			
