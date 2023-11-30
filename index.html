@@ -127,9 +127,10 @@ and displaying the results with JavaScript, CSS and HTML
 		//Loops through all the titles in the XML Object
 		for (i = 0; i < jsonObj.data.results.length; i++) {
 			let isbn = jsonObj.data.results[i].id
-			let isbnArr = isbn.split('-');
+			let isbnSpt = isbn.split('-');
 			
-			arrISBN[i] = isbnArr[isbnArr.lenght-1];
+			arrISBN[i] = isbnSpt[isbnSpt.lenght-1];
+			console.log(arrISBN[i]);
 			
 		}
 
