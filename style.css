@@ -1,0 +1,262 @@
+@charset "UTF-8";
+
+/* CCCS310 - Assignment 4
+ * @student Noemi Desmarais-Racine
+ * @date 2022-04-20
+ * @id #261064339
+ * 
+ * External Stylesheet to format the Book Search Engine index.html
+
+ */
+
+		body{font:16px 'Mulish', sans-serif;font-weight:400;background-color:#fff;color:#000;}
+
+		h1{color:#fff;font-size:64px;line-height: 72px;font-weight:700;margin-bottom:0;}
+		h4{font-weight:900;font-size:12px;line-height: 14px;font-style:normal;margin:0 0 10px;}
+		h5 {color:#fff;font-size:16px;font-weight:300;margin:10px 0 50px;}
+		h6{margin:10px;color:#f0f0f0;}
+		
+		section h3{margin:0;font-weight:500;letter-spacing:1.3px;color:#040404;line-height: 24px;}
+		
+		header{
+			box-shadow: inset 0 0 0 1000px rgba(0,0,0,.5);
+			background: url('images/bookshelf1280.jpg');
+			width:100%;
+			text-align:center;
+			padding:50px 0 80px;
+		}
+		main{text-align:center;background-color:#f0f0f0;margin:0;}
+		section{width:80%;margin:0 auto;min-height:250px;}
+		footer{background-color:#404040; padding:10px 80px;margin:0;}
+		
+		#searchbar{
+			background-color:#fff;
+			padding:30px 5px;
+			position:relative;
+			top:-60px;
+			box-shadow:0 3px 3px #ccc;
+			border-radius: 2px;
+		}
+		
+		input[type=search] {
+			width:80%;	
+			border:1px solid #ccc;
+			font-size:0.7em;
+			padding:7px;
+		}
+		
+		input[type=button] {
+			width:80px;	
+			border-radius: 3px;
+			font-size:0.6em;
+			padding:10px;
+			color:#fff;
+			background-color:#3366ff;
+			border:none;
+		}
+		
+		input[type=button]:hover {
+			background-color:#809fff;
+			cursor:pointer;
+		}
+	
+	 	/* id books: Flexbox container  */
+		#books{
+			display:flex;
+			flex-wrap:wrap;
+			flex-direction:row;
+			justify-content:space-between;
+			align-items:flex-start;
+			
+		}
+		
+		/* class book: Flexbox box items  */
+		.book{
+			text-align:left;
+			width:30%; 
+			background-color:#fff; 
+			border:1px solid #ccc;
+			margin:0 0 20px;
+		}
+		
+		/* label class: Text format inside the flexbox boxes with transition animation for the links  */
+		.label {font-size:11px;margin:10px 10px 30px;font-style:italic;}
+		.label a{
+			text-decoration:none; 
+			font-size:0.8em; 
+			transition-property:font-size;
+			transition-duration:1s;
+		}
+		.label a:hover{font-size:1em;}
+		
+		
+		/* 4 responsive states acting on: 
+				the main h1 header font size
+				the header background image 
+				the width of the input box
+				the width of individual boxes inside the flexbox container
+		*/
+		
+		@media screen and (min-width:200px) and (max-width:640px){
+			h1{font-size:48px;}
+			header{background: url('images/bookshelf640.jpg');}
+			input[type=search] {
+				width:70%;
+			}	
+			.book{
+			width:100%;
+			} 
+		}
+		
+		@media screen and (min-width:641px) and (max-width:1024px){
+			h1{font-size:52px;}
+			header{background: url('images/bookshelf1024.jpg');}
+			input[type=search] {
+				width:80%;
+			}
+			.book{
+			width:29%; 
+			}
+		}
+		
+		@media screen and (min-width:1025px) and (max-width:1280px){
+			h1{font-size:64px;}
+			header{background: url('images/bookshelf1280.jpg');}
+			input[type=search] {
+				width:85%;
+			}
+			.book{
+			width:30%; 
+			}
+			
+		}
+		
+		@media screen and (min-width:1281px) and (max-width:5000px){
+			h1{font-size:72px;}
+			header{background: url('images/bookshelf2400.jpg');}
+			input[type=search] {
+				width:90%;
+			}
+			.book{
+			width:31%; 
+			}
+			
+		}
+		
+		
+		/*  Fade In/Fade Out animated classes for the h3 'Book List' title */
+		
+		.fade-in{
+		  animation-name: FadeIn;
+		  animation-duration: 5s;  
+		  animation-fill-mode: forwards;
+		}
+		
+		.fade-out{
+		  animation-name: FadeOut;
+		  animation-duration: 2s;  
+		  animation-fill-mode: forwards;
+		}
+		
+		/*  Keyframes for the 'Book List' title animation (for all supporting browsers) */
+		@keyframes FadeOut {
+		  0% {
+		    opacity: 1;
+		  }
+		  100% {
+		    opacity: 0;
+		  }
+		  
+		}
+		
+		@keyframes FadeOut {
+		  0% {
+		    opacity: 1;
+		  }
+		  100% {
+		    opacity: 0;
+		  }
+		}
+		
+		@-moz-keyframes FadeOut {
+		  0% {
+		    opacity: 1;
+		  }
+		  100% {
+		    opacity: 0;
+		  }
+		}
+		
+		@-webkit-keyframes FadeOut {
+		  0% {
+		    opacity: 1;
+		  }
+		  100% {
+		    opacity: 0;
+		  }
+		}
+		
+		@-o-keyframes FadeOut {
+		  0% {
+		    opacity: 1;
+		  }
+		  100% {
+		    opacity: 0;
+		  }
+		}
+		
+		@-ms-keyframes FadeOut {
+		  0% {
+		    opacity: 1;
+		  }
+		  100% {
+		    opacity: 0;
+		  }
+		}
+		
+		@keyframes FadeIn {
+		  0% {
+		    opacity: 0;
+		  }
+		  100% {
+		    opacity: 1;
+		  }
+		}
+		
+		@-moz-keyframes FadeIn {
+		  0% {
+		    opacity: 0;
+		  }
+		  100% {
+		    opacity: 1;
+		  }
+		}
+		
+		@-webkit-keyframes FadeIn {
+		  0% {
+		    opacity: 0;
+		  }
+		  100% {
+		    opacity: 1;
+		  }
+		}
+		
+		@-o-keyframes FadeIn {
+		  0% {
+		    opacity: 0;
+		  }
+		  100% {
+		    opacity: 1;
+		  }
+		}
+		
+		@-ms-keyframes FadeIn {
+		  0% {
+		    opacity: 0;
+		  }
+		  100% {
+		    opacity: 1;
+		  }
+		}
+		
+	

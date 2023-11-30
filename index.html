@@ -1,0 +1,282 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<!-- CCCS310 - Assignment 4
+ * @student Noemi Desmarais-Racine
+ * @date 2022-04-20
+ * 
+
+This is a book search engine requesting XML and JSON from APIs with JavaScript 
+and displaying the results with JavaScript, CSS and HTML
+
+ -->
+	<meta charset="UTF-8">
+	<title>Book Search Engine</title>
+
+	<!-- External Google font called Mulish -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,300;0,400;0,500;0,700;0,900;1,400;1,700&display=swap" rel="stylesheet">
+
+	<!-- External stylesheet on the local folder -->
+	<link href='style.css' rel='stylesheet'>
+
+	<script>
+	/* All the JavaScript is here */
+	
+	// Global variable to store the total of books finally displayed on the page
+	var booksShown;
+	
+	/* 
+	displayItem(item) -> Called from the JSON onload function in getDetails() 
+	item: is an Object array extracted from JSON for 1 book to be displayed
+	*/
+	function displayItem(item){
+		//txtHTML -> String to add to the HTML after all elements are added
+		//first, the book cover, url and title
+		var txtHTML = "<div class='book'>"+
+					"<a href='" + item.url + "' target='_blank'>" +
+					"<img width='100%' src='" + item.cover.large + "' /></a>"+
+					"<div class='label'>"+
+					"<h4>" + item.title + "</h4>"+
+					"<strong>";
+		
+		//if many authors -> display Authors: else if only 1 -> Author:
+		txtHTML += (item.authors.length>1) ? "Authors:&nbsp; " : "Author:&nbsp; ";
+		txtHTML += "</strong>"
+		//loops through the authors list to get each name with a comma between each that is not the last one
+		for (x=0;x<item.authors.length;x++){
+			txtHTML += item.authors[x].name;
+			if (x != item.authors.length -1) txtHTML += ", "
+		}
+
+		//displays only 1 publisher, the first one
+		txtHTML += "<br/><br/><strong>Publisher</strong>:&nbsp; " + 
+						item.publishers[0].name + "<br/><br/>";
+		
+		txtHTML += "<strong>"
+		//if many subjects -> display Subjects: else if only 1 -> Subject:	
+		txtHTML += (item.subjects.length>1) ? "Subjects:&nbsp; " : "Subject:&nbsp; ";
+		txtHTML += "</strong>"
+		//loops through the subjects list with a maximum of 12 subjects
+		for (x=0;x<item.subjects.length;x++){
+			txtHTML +=  "<a href='" + item.subjects[x].url + "' target='_blank'>" + 
+							item.subjects[x].name + "</a>&nbsp; ";
+			if (x > 12) break;
+		}
+		
+		txtHTML += "</div>";
+		
+		//insert the new HTML item <div> book at the beginning of the <div> books (container for flex boxes)
+		document.querySelector("#books").insertAdjacentHTML("afterBegin", txtHTML);
+		
+	}
+	
+	/* 
+	getDetails(itemISBN, last) -> Called from a loop in getISBN() 
+	itemISBN: is a String with a specific ISBN number for one item
+	last: is a boolean which indicates true when getISBN() has reached the last iteration of its loop
+	*/
+	function getDetails(itemISBN, last){
+		
+		//A fetch GET call to Open Library's API with the specific ISBN number added to the url
+		fetch("https://openlibrary.org/api/books?jscmd=data&format=json&bibkeys=ISBN:" + itemISBN ,{
+			method: "GET",
+		 })
+		 .then(response => response.json())
+		 .then(function(json){
+			//When the JSON object is returnded from the API it is stored in item 
+			let item = json[Object.keys(json)[0]];
+
+			//Tests if the returned object contains the desired values: title, cover, url, author, publisher and subject 
+			if (Object.keys(json).length != 0  && item.title != null && item.cover != null && item.url != null && item.subjects != null && item.authors != null && item.publishers != null) {
+				//if the object is valid it is displayed in HTML
+				displayItem(item);
+				//Global variable bookShown is incremented
+				booksShown++;
+				
+			}
+			
+		 })
+		 .then(function(json){		 
+			//After the first JSON function is executed
+			//Tests if its the last item and if the total number of items is not dividable by 3
+			if (last && (booksShown % 3 > 0)){
+				//if true -> a number of hidden div (1 or 2) is added 
+				//at the end of the flex container for a better look
+				for (x = 0; x < (3 - (booksShown % 3)); x++)				
+					document.querySelector("#books").insertAdjacentHTML("beforeend", "<div class='book' style='opacity:0;'></div>");
+			}
+			
+		 })
+		 .catch(console.error);
+		
+	}
+
+	/* 
+	readISBN(xmlText) -> Called from the XML onload function in getISBN() 
+	xmlText: is a String with a text in XML format returned from the API
+	*/
+	function readISBN(xmlText){
+		
+		//formatCode: is an array with all the possible book format codes related to the different ISBN from the API
+		//the codes are manually organized to prioritize certain codes before others
+		var formatCode = ["MM", "HC", "DN", "TR", "EL", "TW", "AU", "DG", "MG", "NM", "NT", "BX", "MH", "BR", "VI", "CD", "CS"];
+		
+		//Use DOMParser to parse the XML String into an XML object
+		var parser, xmlDoc;
+		parser = new DOMParser();
+		xmlDoc = parser.parseFromString(xmlText,"text/xml");
+		
+		//arrISBN: will contain the selected ISBN Strings that will be displayed
+		let arrISBN = [];
+		//titles: Extracts only the titles portion of the XML Object
+		let titles = xmlDoc.getElementsByTagName("titles");
+		//stored: boolean switch to indicate when a single ISBN has been selected for a book
+		let stored = false;
+		
+		//Loops through all the titles in the XML Object
+		for (i = 0; i < titles.length; i++) {
+			
+			//Loops through all the possible book format code
+			for (j=0; j < formatCode.length; j++){
+				
+				//Loops through all the bookcode:ISBN pairs for a single book
+				for (k = 0; k < titles[i].childNodes.length; k++){
+				
+					if (titles[i].childNodes[k].attributes[0].nodeValue == formatCode[j]){
+						//When the first ISBN with a prioritized book code is found, it is stored in arrISBN
+						arrISBN.push(titles[i].childNodes[k].innerHTML);
+						//The switch is on
+						stored = true
+						//The first loop is over
+						break;
+					}
+					
+				}
+				if (stored){
+					//When the first loop is broken, the second loop breaks also
+					//To go to the next book item and the switch is reseted
+					stored = false;
+					break;
+				}
+				
+			}
+			
+		}
+
+		//If no book were stored alerts the user for a different search
+		if (arrISBN.length == 0) {
+		 	alert("Can't find any book, please enter a valid search");
+		}else {
+			//Otherwise -> shows the 'Book List' title fade in animation
+			if (document.querySelector("#booktitle").classList.contains('fade-out')){
+				document.querySelector("#booktitle").classList.replace('fade-out', 'fade-in');
+			}else document.querySelector("#booktitle").classList.add('fade-in');
+			
+			//And loops through arrISBN from the end to the beginning
+			//Because items are pushed at the begining of the <div> books container
+			//So this way they will be displayed in the right order
+			for (i = arrISBN.length-1; i >=0 ; i--){
+				if (i == 0) {
+					//Calls getDetails() with boolean true when it's the last iteration
+					getDetails(arrISBN[i], true);
+				}
+				else{
+					//Calls getDetails() with boolean false all the other times
+					getDetails(arrISBN[i], false);
+				}
+							
+			}
+			
+		}
+		
+	}
+	
+	/* 
+	getISBN(keyword) -> Called from searchBooks() 
+	keyword: is a String obtained from the user's input
+	*/
+	function getISBN(keyword){
+	
+		//GET Request for an XML text from Penguin Random House's API with the keyword from the user
+		var xmlRequest = new XMLHttpRequest();
+		xmlRequest.open("GET","https://reststop.randomhouse.com/resources/works/?start=0&max=100&expandLevel=1&search=" + keyword,true);
+		xmlRequest.send();
+		xmlRequest.onload = function(){
+			//Callback function when the XML text is received
+			readISBN(xmlRequest.responseText);
+		}
+		
+	}
+	/*
+	searchBooks() -> Called from the EventListener when the user submits an input value 
+	*/
+	function searchBooks(){
+		
+		//Resets the page's state for a new Search and the booksShown global variable
+		//Deletes all previous books displayed in <div> books container, if any
+		//Fades out the 'Book List' title if it was displayed
+		booksShown = 0;
+		document.getElementById("books").innerHTML = "";
+		
+		if (document.querySelector("#booktitle").classList.contains('fade-in')){
+			document.querySelector("#booktitle").classList.replace('fade-in', 'fade-out');
+		}
+		
+		//keyword: stores the String of the user's input
+		let keyword = document.querySelector("#searchInput").value;
+		
+		//If the input is not empty launch the XML request
+		if (keyword != ""){
+			
+			getISBN(keyword);
+			
+		}else alert("Can't find any book, please enter a valid search");
+		
+	}
+	
+	/*
+	init() -> Called from the body onload 
+	*/
+	function init(){
+		//Adds 2 listeners for the user's input, one fired when Search button is pressed 
+		//the other with 'Enter' key pressed when in the input Search box
+		document.getElementById("searchBtn").addEventListener("click", searchBooks);
+		document.getElementById("searchInput").addEventListener("search", searchBooks);
+
+		//Hides the 'Book List' title before any search is made
+		document.querySelector("#booktitle").style.opacity = 0;
+	}
+	
+	</script>
+
+</head>
+<body onload="init()">
+
+	<header>
+		<h1>Search for Books</h1>
+		<h5>This is my books search engine</h5>
+	</header>
+	<main>
+
+		<section>
+			<div id="searchbar">
+				
+				<input id="searchInput" type="search" placeholder="Search for books" />
+				<input id="searchBtn" type="button" value="SEARCH"/>
+				
+			</div>
+
+			<h3 id="booktitle">Book List</h3>
+			<br/><br/>
+			<div id="books"></div>
+		</section>
+	</main>
+	
+	<footer>
+		<h6>Copyright &copy; CCCS310 A4</h6>
+	</footer>
+</body>
+</html>
