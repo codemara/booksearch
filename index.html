@@ -27,7 +27,7 @@ and displaying the results with JavaScript, CSS and HTML
 	/* All the JavaScript is here */
 	
 	// Global variable to store the total of books finally displayed on the page
-	var booksShown;
+	var booksShown = 0;
 	
 	/* 
 	displayItem(item) -> Called from the JSON onload function in getDetails() 
@@ -90,8 +90,6 @@ and displaying the results with JavaScript, CSS and HTML
 			//When the JSON object is returnded from the API it is stored in item 
 			let item = json[Object.keys(json)[0]];
 
-			console.log(item);
-
 			//Tests if the returned object contains the desired values: title, cover, url, author, publisher and subject 
 			if (Object.keys(json).length != 0  && item.title != null && item.cover != null && item.url != null && item.subjects != null && item.authors != null && item.publishers != null) {
 				//if the object is valid it is displayed in HTML
@@ -110,7 +108,7 @@ and displaying the results with JavaScript, CSS and HTML
 				//at the end of the flex container for a better look
 				for (x = 0; x < (3 - (booksShown % 3)); x++)				
 					document.querySelector("#books").insertAdjacentHTML("beforeend", "<div class='book' style='opacity:0;'></div>");
-			}
+			}else if (last && booksShown == 0)
 			
 		 })
 		 .catch(console.error);
@@ -132,8 +130,7 @@ and displaying the results with JavaScript, CSS and HTML
 			let isbnSpt = isbn.split('-');
 			
 			arrISBN[i] = isbnSpt[isbnSpt.length-1];
-			console.log(arrISBN[i]);
-			
+	
 		}
 
 		//If no book were stored alerts the user for a different search
@@ -178,7 +175,7 @@ and displaying the results with JavaScript, CSS and HTML
 		//GET Request for a JSON Object from Penguin Random House's API with the keyword (query q) from the user
 
 		//A fetch GET call to Open Library's API with the specific ISBN number added to the url
-		fetch("https://api.penguinrandomhouse.com/resources/v2/title/domains/PRH.US/search?rows=20&docType=isbn&api_key=x2w6xdemsxy79fujj6z53hbh&q=" + keyword ,{
+		fetch("https://api.penguinrandomhouse.com/resources/v2/title/domains/PRH.US/search?rows=100&docType=isbn&api_key=x2w6xdemsxy79fujj6z53hbh&q=" + keyword ,{
 			method: "GET",
 		 })
 		 .then(response => response.json())
