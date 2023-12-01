@@ -56,7 +56,7 @@
 	last: is a boolean which indicates true when getISBN() has reached the last iteration of its loop
 	*/
 	function getDetails(itemISBN, itemsTotal){
-		let last = (itemsTotal == jsonCount)?true:false;
+		let last;
 		console.log("PRE----last:"+last+", bookShown:"+booksShown+", jsonCount:"+jsonCount);
 		//A fetch GET call to Open Library's API with the specific ISBN number added to the url
 		fetch("https://openlibrary.org/api/books?jscmd=data&format=json&bibkeys=ISBN:" + itemISBN ,{
@@ -81,10 +81,10 @@
 			 
 			console.log("OUT----last:"+last+", bookShown"+booksShown+", jsonCount:"+jsonCount);
 		 })
-		.then(function(json){
+		.then(function(json){			
+			let last = (itemsTotal == jsonCount)?true:false;
 			if (last) {
-				 
-		console.log("INLAST----last:"+last+", bookShown"+booksShown);
+			console.log("INLAST----last:"+last+", bookShown"+booksShown);
 			    if (booksShown % 3 > 0){
 				//if true -> a number of hidden div (1 or 2) is added 
 				//at the end of the flex container for a better look
