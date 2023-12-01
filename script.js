@@ -66,11 +66,10 @@
 
 			//Tests if the returned object contains the desired values: title, cover, url, author, publisher and subject 
 			if (Object.keys(json).length != 0  && item.title != null && item.cover != null && item.url != null && item.subjects != null && item.authors != null && item.publishers != null) {
-				//if the object is valid it is displayed in HTML
-				displayItem(item);
 				//Global variable bookShown is incremented
 				booksShown++;
-				
+				//if the object is valid it is displayed in HTML
+				displayItem(item);
 			}
 			if (last) {
 			    if (booksShown % 3 > 0){
@@ -78,7 +77,7 @@
 				//at the end of the flex container for a better look
 				for (x = 0; x < (3 - (booksShown % 3)); x++)				
 					document.querySelector("#books").insertAdjacentHTML("beforeend", "<div class='book' style='opacity:0;'></div>");
-				}else if (booksShown == 0) alert("Can't find any book, try another search");
+				}else if (booksShown === 0) alert("Can't find any book, try another search");
 			}
 		 })
 		
