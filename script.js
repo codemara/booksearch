@@ -1,7 +1,7 @@
 	/* All the JavaScript is here */
 	
 	// Global variable to store the total of books finally displayed on the page
-	var booksShown = 0;
+	var booksShown;
 	
 	/* 
 	displayItem(item) -> Called from the JSON onload function in getDetails() 
@@ -45,6 +45,8 @@
 		
 		//insert the new HTML item <div> book at the beginning of the <div> books (container for flex boxes)
 		document.querySelector("#books").insertAdjacentHTML("afterBegin", txtHTML);
+
+		
 		
 	}
 	
@@ -71,13 +73,13 @@
 				//if the object is valid it is displayed in HTML
 				displayItem(item);
 			}
-			if (last) {
+			 if (last) {
 			    if (booksShown % 3 > 0){
 				//if true -> a number of hidden div (1 or 2) is added 
 				//at the end of the flex container for a better look
 				for (x = 0; x < (3 - (booksShown % 3)); x++)				
 					document.querySelector("#books").insertAdjacentHTML("beforeend", "<div class='book' style='opacity:0;'></div>");
-				}else if (booksShown === 0) alert("Can't find any book, try another search");
+				}else if (booksShown === 0) alert("Couldn't find any book, try another search");
 			}
 		 })
 		
@@ -105,7 +107,7 @@
 
 		//If no book were stored alerts the user for a different search
 		if (arrISBN.length == 0) {
-		 	alert("Can't find any book, please enter a valid search");
+		 	alert("Can't find any book, please try another keyword");
 		}else {
 			//Otherwise -> shows the 'Book List' title fade in animation
 			if (document.querySelector("#booktitle").classList.contains('fade-out')){
@@ -152,8 +154,9 @@
 		 .then(function(json){
 			//When the JSON object is returned from the API it is stored in item 
 			//Callback function when the json is received
-			readISBN(json);
 			console.log(json);
+			 readISBN(json);
+			
 			
 		 })
 		 .catch(console.error);
@@ -177,7 +180,7 @@
 		//keyword: stores the String of the user's input
 		let keyword = document.querySelector("#searchInput").value;
 		
-		//If the input is not empty launch the XML request
+		//If the input is not empty launch the json request
 		if (keyword != ""){
 			
 			getISBN(keyword);
