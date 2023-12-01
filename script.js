@@ -56,7 +56,7 @@
 	last: is a boolean which indicates true when getISBN() has reached the last iteration of its loop
 	*/
 	function getDetails(itemISBN, itemsTotal){
-		let last;
+		let last = false;
 		console.log("PRE----last:"+last+", bookShown:"+booksShown+", jsonCount:"+jsonCount);
 		//A fetch GET call to Open Library's API with the specific ISBN number added to the url
 		fetch("https://openlibrary.org/api/books?jscmd=data&format=json&bibkeys=ISBN:" + itemISBN ,{
