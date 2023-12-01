@@ -135,9 +135,8 @@
 			}
 
 			// Shows the 'Book List' title fade in animation
-			if (document.querySelector("#booktitle").classList.contains('fade-out')){
-				document.querySelector("#booktitle").classList.replace('fade-out', 'fade-in');
-			}else document.querySelector("#booktitle").classList.add('fade-in');
+			fadeTitle('fade-out', 'fade-in');
+		
 			
 			
 		}
@@ -177,6 +176,13 @@
 		 .catch(console.error);
 		
 	}
+
+	function fadeTitle(currentClass, newClass){
+		if (document.querySelector("#booktitle").classList.contains(currentClass)){
+			document.querySelector("#booktitle").classList.replace(currentClass, newClass);
+		}
+	}
+	
 	/*
 	searchBooks() -> Called from the EventListener when the user submits an input value 
 	*/
@@ -189,9 +195,7 @@
 		jsonCount = 0;
 		document.getElementById("books").innerHTML = "";
 		
-		if (document.querySelector("#booktitle").classList.contains('fade-in')){
-			document.querySelector("#booktitle").classList.replace('fade-in', 'fade-out');
-		}
+		fadeTitle('fade-in', 'fade-out');
 		
 		//keyword: stores the String of the user's input
 		let keyword = document.querySelector("#searchInput").value;
