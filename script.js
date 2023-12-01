@@ -130,10 +130,12 @@
 			//So this way they will be displayed in the right order
 			for (i = arrISBN.length-1; i >=0 ; i--){
 				if (i == 0) {
+					console.log("i==0--"+arrISBN);
 					//Calls getDetails() with boolean true when it's the last iteration
 					getDetails(arrISBN[i], true);
 				}
 				else{
+					console.log("i!=0--"+arrISBN);
 					//Calls getDetails() with boolean false all the other times
 					getDetails(arrISBN[i], false);
 				}
