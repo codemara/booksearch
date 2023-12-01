@@ -120,6 +120,7 @@
 		if (arrISBN.length == 0) {
 		 	alert("Can't find any book, please try another keyword");
 		}else {
+			console.log("ISBN:"+arrISBN);
 			//Otherwise -> shows the 'Book List' title fade in animation
 			if (document.querySelector("#booktitle").classList.contains('fade-out')){
 				document.querySelector("#booktitle").classList.replace('fade-out', 'fade-in');
@@ -130,12 +131,12 @@
 			//So this way they will be displayed in the right order
 			for (i = arrISBN.length-1; i >=0 ; i--){
 				if (i == 0) {
-					console.log("i==0--"+arrISBN);
+					console.log("i==0::"+arrISBN[i]);
 					//Calls getDetails() with boolean true when it's the last iteration
 					getDetails(arrISBN[i], true);
 				}
 				else{
-					console.log("i!=0--"+arrISBN);
+					console.log("i!=0::"+arrISBN[i]);
 					//Calls getDetails() with boolean false all the other times
 					getDetails(arrISBN[i], false);
 				}
