@@ -56,8 +56,8 @@
 	last: is a boolean which indicates true when getISBN() has reached the last iteration of its loop
 	*/
 	function getDetails(itemISBN, itemsTotal){
-		let last = false;
-		console.log("PRE----last:"+last+", bookShown:"+booksShown+", jsonCount:"+jsonCount);
+		
+		console.log("PRE---- bookShown:"+booksShown+", jsonCount:"+jsonCount);
 		//A fetch GET call to Open Library's API with the specific ISBN number added to the url
 		fetch("https://openlibrary.org/api/books?jscmd=data&format=json&bibkeys=ISBN:" + itemISBN ,{
 			method: "GET",
@@ -67,7 +67,7 @@
 			//When the JSON object is returnded from the API it is stored in item 
 			let item = json[Object.keys(json)[0]];
 			jsonCount++;
-			last = (itemsTotal == jsonCount)?true:false;
+			let last = (itemsTotal == jsonCount)?true:false;
 		        console.log("IN----last:"+last+", bookShown"+booksShown+", jsonCount:"+jsonCount);
 			//Tests if the returned object contains the desired values: title, cover, url, author, publisher and subject 
 			if (Object.keys(json).length != 0  && item.title != null && item.cover != null && item.url != null && item.subjects != null && item.authors != null && item.publishers != null) {
