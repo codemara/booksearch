@@ -67,6 +67,7 @@
 			//When the JSON object is returnded from the API it is stored in item 
 			let item = json[Object.keys(json)[0]];
 			jsonCount++;
+			last = (itemsTotal == jsonCount)?true:false;
 		        console.log("IN----last:"+last+", bookShown"+booksShown+", jsonCount:"+jsonCount);
 			//Tests if the returned object contains the desired values: title, cover, url, author, publisher and subject 
 			if (Object.keys(json).length != 0  && item.title != null && item.cover != null && item.url != null && item.subjects != null && item.authors != null && item.publishers != null) {
@@ -76,13 +77,8 @@
 		                console.log("PRE-DISPLAY----last:"+last+", bookShown"+booksShown+", jsonCount:"+jsonCount);
 				displayItem(item);
 			}
-			 
-			 
-			 
-			console.log("OUT----last:"+last+", bookShown"+booksShown+", jsonCount:"+jsonCount);
-		 })
-		.then(function(json){			
-			let last = (itemsTotal == jsonCount)?true:false;
+
+			
 			if (last) {
 			console.log("INLAST----last:"+last+", bookShown"+booksShown);
 			    if (booksShown % 3 > 0){
@@ -95,7 +91,10 @@
 				    console.log("IN-ALERT----last:"+last+", bookShown"+booksShown);
 			    }
 			}
-		})
+			 
+			 
+			console.log("OUT----last:"+last+", bookShown"+booksShown+", jsonCount:"+jsonCount);
+		 })
 		
 		 .catch(console.error);
 		
