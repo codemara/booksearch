@@ -57,7 +57,7 @@
 	*/
 	function getDetails(itemISBN, itemsTotal){
 		let last = (itemsTotal == jsonCount)?true:false;
-		console.log("PRE----last:"+last+", bookShown"+booksShown);
+		console.log("PRE----last:"+last+", bookShown:"+booksShown+", jsonCount:"+jsonCount);
 		//A fetch GET call to Open Library's API with the specific ISBN number added to the url
 		fetch("https://openlibrary.org/api/books?jscmd=data&format=json&bibkeys=ISBN:" + itemISBN ,{
 			method: "GET",
@@ -67,20 +67,19 @@
 			//When the JSON object is returnded from the API it is stored in item 
 			let item = json[Object.keys(json)[0]];
 			jsonCount++;
-		        console.log("IN----last:"+last+", bookShown"+booksShown);
+		        console.log("IN----last:"+last+", bookShown"+booksShown+", jsonCount:"+jsonCount);
 			//Tests if the returned object contains the desired values: title, cover, url, author, publisher and subject 
 			if (Object.keys(json).length != 0  && item.title != null && item.cover != null && item.url != null && item.subjects != null && item.authors != null && item.publishers != null) {
 				//Global variable bookShown is incremented
 				booksShown++;
-				//if the object is valid it is displayed in HTML
-				
-		                console.log("PRE-DISPLAY----last:"+last+", bookShown"+booksShown);
+				//if the object is valid it is displayed in HTML	
+		                console.log("PRE-DISPLAY----last:"+last+", bookShown"+booksShown+", jsonCount:"+jsonCount);
 				displayItem(item);
 			}
 			 
 			 
 			 
-			console.log("OUT----last:"+last+", bookShown"+booksShown);
+			console.log("OUT----last:"+last+", bookShown"+booksShown+", jsonCount:"+jsonCount);
 		 })
 		.then(function(json){
 			if (last) {
@@ -125,12 +124,8 @@
 		 	alert("Can't find any book, please try another keyword");
 		}else {
 			console.log("ISBN:"+arrISBN);
-			//Otherwise -> shows the 'Book List' title fade in animation
-			if (document.querySelector("#booktitle").classList.contains('fade-out')){
-				document.querySelector("#booktitle").classList.replace('fade-out', 'fade-in');
-			}else document.querySelector("#booktitle").classList.add('fade-in');
-			
-			//And loops through arrISBN from the end to the beginning
+		
+			//Loops through arrISBN from the end to the beginning
 			//Because items are pushed at the begining of the <div> books container
 			//So this way they will be displayed in the right order
 			for (i = arrISBN.length-1; i >=0 ; i--){
@@ -139,7 +134,12 @@
 				getDetails(arrISBN[i], arrISBN.length);
 				
 			}
-						
+
+			// Shows the 'Book List' title fade in animation
+			if (document.querySelector("#booktitle").classList.contains('fade-out')){
+				document.querySelector("#booktitle").classList.replace('fade-out', 'fade-in');
+			}else document.querySelector("#booktitle").classList.add('fade-in');
+			
 			
 		}
 			
