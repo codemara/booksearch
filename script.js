@@ -174,7 +174,7 @@
 	function fadeTitle(currentClass, newClass){
 		if (document.querySelector("#booktitle").classList.contains(currentClass)){
 			document.querySelector("#booktitle").classList.replace(currentClass, newClass);
-		}
+		} else document.querySelector("#booktitle").classList.add(newClass);
 	}
 	
 	/*
