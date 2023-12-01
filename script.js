@@ -57,7 +57,7 @@
 	*/
 	function getDetails(itemISBN, itemsTotal){
 		
-		console.log("PRE---- bookShown:"+booksShown+", jsonCount:"+jsonCount);
+		//console.log("PRE---- bookShown:"+booksShown+", jsonCount:"+jsonCount);
 		//A fetch GET call to Open Library's API with the specific ISBN number added to the url
 		fetch("https://openlibrary.org/api/books?jscmd=data&format=json&bibkeys=ISBN:" + itemISBN ,{
 			method: "GET",
@@ -65,16 +65,16 @@
 		 .then(response => response.json())
 		 .then(function(json){
 			//When the JSON object is returnded from the API it is stored in item 
-			let item = json[Object.keys(json)[0]];
-			jsonCount++;
-			let last = (itemsTotal == jsonCount)?true:false;
-		        console.log("IN----last:"+last+", bookShown"+booksShown+", jsonCount:"+jsonCount);
+			 jsonCount++;
+			 let item = json[Object.keys(json)[0]];
+			 let last = (itemsTotal == jsonCount) ? true : false;
+		        //console.log("IN----last:"+last+", bookShown"+booksShown+", jsonCount:"+jsonCount);
 			//Tests if the returned object contains the desired values: title, cover, url, author, publisher and subject 
 			if (Object.keys(json).length != 0  && item.title != null && item.cover != null && item.url != null && item.subjects != null && item.authors != null && item.publishers != null) {
 				//Global variable bookShown is incremented
 				booksShown++;
 				//if the object is valid it is displayed in HTML	
-		                console.log("PRE-DISPLAY----last:"+last+", bookShown"+booksShown+", jsonCount:"+jsonCount);
+		                //console.log("PRE-DISPLAY----last:"+last+", bookShown"+booksShown+", jsonCount:"+jsonCount);
 				displayItem(item);
 			}
 
@@ -83,7 +83,7 @@
 			console.log("INLAST----last:"+last+", bookShown"+booksShown);
 			    if (booksShown === 0) {
 				    alert("Couldn't find any book, try another search");   
-				    console.log("IN-ALERT----last:"+last+", bookShown"+booksShown);	
+				    //console.log("IN-ALERT----last:"+last+", bookShown"+booksShown);	
 			    }else {
 				    fadeTitle('fade-out','fade-in');
 				    if (booksShown % 3 > 0){
@@ -96,7 +96,7 @@
 			}
 			 
 			 
-			console.log("OUT----last:"+last+", bookShown"+booksShown+", jsonCount:"+jsonCount);
+			//console.log("OUT----last:"+last+", bookShown"+booksShown+", jsonCount:"+jsonCount);
 		 })
 		
 		 .catch(console.error);
@@ -125,13 +125,13 @@
 		if (arrISBN.length == 0) {
 		 	alert("Can't find any book, please try another keyword");
 		}else {
-			console.log("ISBN:"+arrISBN);
+			//console.log("ISBN:"+arrISBN);
 		
 			//Loops through arrISBN from the end to the beginning
 			//Because items are pushed at the begining of the <div> books container
 			//So this way they will be displayed in the right order
 			for (i = arrISBN.length-1; i >=0 ; i--){
-				console.log("i==0::"+arrISBN[i]);
+				//console.log("i==0::"+arrISBN[i]);
 				//Calls getDetails() with boolean true when it's the last iteration
 				getDetails(arrISBN[i], arrISBN.length);
 				
@@ -146,19 +146,11 @@
 			
 		
 	}
-		
-	
-
-
-
 	
 	/* 
 	getISBN(keyword) -> Called from searchBooks() 
 	keyword: is a String obtained from the user's input
 	*/
-
-
-
 	function getISBN(keyword){
 	
 		//GET Request for a JSON Object from Penguin Random House's API with the keyword (query q) from the user
