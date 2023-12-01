@@ -82,7 +82,8 @@
 				//at the end of the flex container for a better look
 				for (x = 0; x < (3 - (booksShown % 3)); x++)				
 					document.querySelector("#books").insertAdjacentHTML("beforeend", "<div class='book' style='opacity:0;'></div>");
-			}else if (last && (booksShown == 0))  alert("Can't find any book, try another search");
+			}
+			if (last && (booksShown == 0))  alert("Can't find any book, try another search");
 			
 		 })
 		 .catch(console.error);
