@@ -56,7 +56,7 @@
 	last: is a boolean which indicates true when getISBN() has reached the last iteration of its loop
 	*/
 	function getDetails(itemISBN, last){
-		
+		console.log("PRE----last:"+last+", bookShown"+booksShown);
 		//A fetch GET call to Open Library's API with the specific ISBN number added to the url
 		fetch("https://openlibrary.org/api/books?jscmd=data&format=json&bibkeys=ISBN:" + itemISBN ,{
 			method: "GET",
@@ -65,22 +65,33 @@
 		 .then(function(json){
 			//When the JSON object is returnded from the API it is stored in item 
 			let item = json[Object.keys(json)[0]];
-
+			
+		        console.log("IN----last:"+last+", bookShown"+booksShown);
 			//Tests if the returned object contains the desired values: title, cover, url, author, publisher and subject 
 			if (Object.keys(json).length != 0  && item.title != null && item.cover != null && item.url != null && item.subjects != null && item.authors != null && item.publishers != null) {
 				//Global variable bookShown is incremented
 				booksShown++;
 				//if the object is valid it is displayed in HTML
+				
+		                console.log("PRE-DISPLAY----last:"+last+", bookShown"+booksShown);
 				displayItem(item);
 			}
+			 
 			 if (last) {
+				 
+		console.log("INLAST----last:"+last+", bookShown"+booksShown);
 			    if (booksShown % 3 > 0){
 				//if true -> a number of hidden div (1 or 2) is added 
 				//at the end of the flex container for a better look
 				for (x = 0; x < (3 - (booksShown % 3)); x++)				
 					document.querySelector("#books").insertAdjacentHTML("beforeend", "<div class='book' style='opacity:0;'></div>");
-				}else if (booksShown === 0) alert("Couldn't find any book, try another search");
+				}else if (booksShown === 0) {
+				    alert("Couldn't find any book, try another search");   
+				    console.log("IN-ALERT----last:"+last+", bookShown"+booksShown);
+			    }
 			}
+			 
+			console.log("OUT----last:"+last+", bookShown"+booksShown);
 		 })
 		
 		 .catch(console.error);
