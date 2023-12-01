@@ -93,14 +93,13 @@
 						    document.querySelector("#books").insertAdjacentHTML("beforeend", "<div class='book' style='opacity:0;'></div>");
 				    
 				    }
-			}
-			 
-			 
+			
+			    }
 			//console.log("OUT----last:"+last+", bookShown"+booksShown+", jsonCount:"+jsonCount);
+			
+			} 
 		 })
-		
 		 .catch(console.error);
-		
 	}
 
 	/* 
