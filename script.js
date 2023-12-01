@@ -2,7 +2,7 @@
 	
 	// Global variable to store the total of books finally displayed on the page
 	var booksShown;
-	
+	var jsonCount;
 	/* 
 	displayItem(item) -> Called from the JSON onload function in getDetails() 
 	item: is an Object array extracted from JSON for 1 book to be displayed
@@ -55,7 +55,8 @@
 	itemISBN: is a String with a specific ISBN number for one item
 	last: is a boolean which indicates true when getISBN() has reached the last iteration of its loop
 	*/
-	function getDetails(itemISBN, last){
+	function getDetails(itemISBN, itemsTotal){
+		let last = (itemsTotal == jsonCount)?true:false;
 		console.log("PRE----last:"+last+", bookShown"+booksShown);
 		//A fetch GET call to Open Library's API with the specific ISBN number added to the url
 		fetch("https://openlibrary.org/api/books?jscmd=data&format=json&bibkeys=ISBN:" + itemISBN ,{
@@ -65,7 +66,7 @@
 		 .then(function(json){
 			//When the JSON object is returnded from the API it is stored in item 
 			let item = json[Object.keys(json)[0]];
-			
+			jsonCount++;
 		        console.log("IN----last:"+last+", bookShown"+booksShown);
 			//Tests if the returned object contains the desired values: title, cover, url, author, publisher and subject 
 			if (Object.keys(json).length != 0  && item.title != null && item.cover != null && item.url != null && item.subjects != null && item.authors != null && item.publishers != null) {
@@ -77,7 +78,12 @@
 				displayItem(item);
 			}
 			 
-			 if (last) {
+			 
+			 
+			console.log("OUT----last:"+last+", bookShown"+booksShown);
+		 })
+		.then(function(json){
+			if (last) {
 				 
 		console.log("INLAST----last:"+last+", bookShown"+booksShown);
 			    if (booksShown % 3 > 0){
@@ -90,9 +96,7 @@
 				    console.log("IN-ALERT----last:"+last+", bookShown"+booksShown);
 			    }
 			}
-			 
-			console.log("OUT----last:"+last+", bookShown"+booksShown);
-		 })
+		})
 		
 		 .catch(console.error);
 		
@@ -130,22 +134,20 @@
 			//Because items are pushed at the begining of the <div> books container
 			//So this way they will be displayed in the right order
 			for (i = arrISBN.length-1; i >=0 ; i--){
-				if (i == 0) {
-					console.log("i==0::"+arrISBN[i]);
-					//Calls getDetails() with boolean true when it's the last iteration
-					getDetails(arrISBN[i], true);
-				}
-				else{
-					console.log("i!=0::"+arrISBN[i]);
-					//Calls getDetails() with boolean false all the other times
-					getDetails(arrISBN[i], false);
-				}
-							
+				console.log("i==0::"+arrISBN[i]);
+				//Calls getDetails() with boolean true when it's the last iteration
+				getDetails(arrISBN[i], arrISBN.length);
+				
 			}
+						
 			
 		}
+			
 		
 	}
+		
+	
+}
 
 
 	
@@ -185,6 +187,7 @@
 		//Deletes all previous books displayed in <div> books container, if any
 		//Fades out the 'Book List' title if it was displayed
 		booksShown = 0;
+		jsonCount = 0;
 		document.getElementById("books").innerHTML = "";
 		
 		if (document.querySelector("#booktitle").classList.contains('fade-in')){
