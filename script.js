@@ -72,20 +72,16 @@
 				booksShown++;
 				
 			}
-			
-		 })
-		 .then(function(json){		 
-			//After the first JSON function is executed
-			//Tests if its the last item and if the total number of items is not dividable by 3
-			if (last && (booksShown % 3 > 0)){
+			if (last) {
+			    if (booksShown % 3 > 0){
 				//if true -> a number of hidden div (1 or 2) is added 
 				//at the end of the flex container for a better look
 				for (x = 0; x < (3 - (booksShown % 3)); x++)				
 					document.querySelector("#books").insertAdjacentHTML("beforeend", "<div class='book' style='opacity:0;'></div>");
+				}else if (booksShown == 0) alert("Can't find any book, try another search");
 			}
-			if (last && (booksShown == 0))  alert("Can't find any book, try another search");
-			
 		 })
+		
 		 .catch(console.error);
 		
 	}
